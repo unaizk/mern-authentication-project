@@ -4,10 +4,12 @@ import express from "express";
 import dotenv from 'dotenv';
 dotenv.config(); // Load environment variables
 import { notFound, errorHandler } from "./middleware/errorMiddleware.js"; // Custom error handling middleware
-
+import connectDB from "./config/db.js";  // importing mongodb connected function
 const port = process.env.PORT || 5000; // Define the port for the server to listen on
 
 import userRoutes from "./routes/userRoutes.js"; // Import user-related routes
+
+connectDB();
 
 // Create an instance of the Express application
 const app = express();
