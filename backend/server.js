@@ -4,6 +4,7 @@ import express from "express";
 import dotenv from 'dotenv';
 dotenv.config(); // Load environment variables
 import { notFound, errorHandler } from "./middleware/errorMiddleware.js"; // Custom error handling middleware
+import cookieParser from "cookie-parser";
 import connectDB from "./config/db.js";  // importing mongodb connected function
 const port = process.env.PORT || 5000; // Define the port for the server to listen on
 
@@ -18,11 +19,13 @@ const app = express();
 // This allows us to access the JSON data in route handlers using req.body.
 app.use(express.json());
 
-
 // Middleware to parse incoming URL-encoded data in the request body.
 // The extended option set to true allows handling rich objects and arrays in the URL-encoded data.
 // This middleware makes the parsed data available in route handlers using req.body.
 app.use(express.urlencoded({extended:true}))
+
+
+app.use(cookieParser());
 
 
 // Set up routes for handling user-related API requests
