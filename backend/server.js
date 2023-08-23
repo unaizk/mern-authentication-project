@@ -31,6 +31,8 @@ app.use(cookieParser());
 // Set up routes for handling user-related API requests
 app.use('/api/users/', userRoutes);
 
+
+
 // Set up a basic route for the root URL
 app.get('/', (req, res) => res.send("Server is ready"));
 
