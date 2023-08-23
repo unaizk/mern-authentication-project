@@ -7,7 +7,7 @@ import { notFound, errorHandler } from "./middleware/errorMiddleware.js"; // Cus
 import cookieParser from "cookie-parser";
 import connectDB from "./config/db.js";  // importing mongodb connected function
 const port = process.env.PORT || 5000; // Define the port for the server to listen on
-
+import adminRoutes from "./routes/adminRoutes.js"
 import userRoutes from "./routes/userRoutes.js"; // Import user-related routes
 
 connectDB(); //calling mongoDB connected function that is imported from config folder
@@ -30,6 +30,9 @@ app.use(cookieParser());
 
 // Set up routes for handling user-related API requests
 app.use('/api/users/', userRoutes);
+
+// Set up routes for handling admin-related API requests
+app.use('/api/admin/', adminRoutes);
 
 // Set up a basic route for the root URL
 app.get('/', (req, res) => res.send("Server is ready"));
