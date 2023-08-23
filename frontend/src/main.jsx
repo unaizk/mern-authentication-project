@@ -17,14 +17,31 @@ import { PrivateRoute } from "./components/PrivateRoute.jsx";
 import store from "./store.js";
 import { Provider } from "react-redux";
 
+//imports which is related to admin page
+
+import AdminHomeScreen from "./screens/AdminHomeScreen.jsx";
+import AdminLoginScreen from "./screens/AdminLoginScreen.jsx";
+import AdminRegisterScreen from "./screens/AdminRegisterScreen.jsx";
+import { AdminPrivateRoute } from "./components/AdminPrivateRoute.jsx";
+import AdminProfileScreen from "./screens/AdminProfileScreen.jsx";
+
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route path="/" element={<App />}>
+      {/*================================= user route handler========================================== */}
       <Route index={true} path="/" element={<HomeScreen />} />
       <Route path="/login" element={<LoginScreen />} />
       <Route path="/register" element={<RegisterScreen />} />
       <Route path="" element = {<PrivateRoute />}>
         <Route path="/profile" element={<ProfileScreen />} /> 
+      </Route>
+      {/*================================= admin route handler========================================== */}
+
+      <Route index={true} path="/admin" element={<AdminHomeScreen />} />
+      <Route path="/admin/login" element={<AdminLoginScreen />} />
+      <Route path="/admin/register" element={<AdminRegisterScreen />} />
+      <Route path="" element = {<AdminPrivateRoute />}>
+        <Route path="/admin/profile" element={<AdminProfileScreen />} /> 
       </Route>
     </Route>
   )

@@ -2,25 +2,25 @@ import { Navbar, Nav, Container, NavDropdown } from 'react-bootstrap';
 import { FaSignInAlt, FaSignOutAlt } from 'react-icons/fa';
 import { useSelector,useDispatch } from 'react-redux';
 import { LinkContainer } from 'react-router-bootstrap';
-import { useLogoutMutation } from '../slices/usersApiSlice';
-import { logout } from '../slices/authSlice';
+import { useAdminLogoutMutation } from '../slices/adminApiSlice';
+import { adminLogout } from '../slices/adminAuthSlice';
 import React from 'react'
 import { useNavigate } from 'react-router-dom';
 
 
 
 
-const Header = ()=> {
-    const {userInfo} = useSelector((state)=> state.auth)
-    const [logoutApiCall] = useLogoutMutation();
+const AdminHeader = ()=> {
+    const {adminInfo} = useSelector((state)=> state.adminAuth)
+    const [adminLogoutApiCall] = useAdminLogoutMutation();
     const dispatch = useDispatch();
     const navigate = useNavigate()
     
     const logoutHandler = async ()=>{
         try {
-            await logoutApiCall().unwrap();
-            dispatch(logout());
-            navigate('/')
+            await adminLogoutApiCall().unwrap();
+            dispatch(adminLogout());
+            navigate('/admin')
 
         } catch (err) {
             console.log(err);
@@ -30,22 +30,22 @@ const Header = ()=> {
     <header>
         <Navbar bg='dark' variant='dark' expand='lg' collapseOnSelect>
             <Container>
-                <LinkContainer to='/'>
-                <Navbar.Brand>MERN Authentication</Navbar.Brand>
+                <LinkContainer to='/admin'>
+                <Navbar.Brand>Admin Authentication</Navbar.Brand>
                 </LinkContainer>
                 
                 <Navbar.Toggle aria-controls='basic-navbar-nav'/>
                 <Navbar.Collapse id='basic-navbar-nav'>
                     <Nav className='ms-auto'>
-                        {userInfo ? (
+                        {adminInfo ? (
                             <>
-                            <NavDropdown title={userInfo.name} id = 'username'>
-                                <LinkContainer to = '/profile'>
+                            <NavDropdown title={adminInfo.name} id = 'username'>
+                                <LinkContainer to = '/admin/profile'>
                                     <NavDropdown.Item>
                                         Profile
                                     </NavDropdown.Item>
                                 </LinkContainer>
-                                <LinkContainer to = '/logout'>
+                                <LinkContainer to = '/admin/logout'>
                                     <NavDropdown.Item onClick={logoutHandler}>
                                         Logout
                                     </NavDropdown.Item>
@@ -55,12 +55,12 @@ const Header = ()=> {
                         ) : 
                         (
                             <>
-                            <LinkContainer to='/login'>
+                            <LinkContainer to='/admin/login'>
                             <Nav.Link >
                                 <FaSignInAlt/>Sign In
                             </Nav.Link>
                             </LinkContainer>
-                            <LinkContainer to='/register'>
+                            <LinkContainer to='/admin/register'>
                             <Nav.Link>
                                 <FaSignOutAlt/>Sign Up
                             </Nav.Link>
@@ -77,4 +77,4 @@ const Header = ()=> {
   )
 }
 
-export default Header
+export default AdminHeader
