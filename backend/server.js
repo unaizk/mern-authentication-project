@@ -1,6 +1,8 @@
 
 // ==========================================Import required modules and configuration files==========================================
 import express from "express";
+import cors from "cors"
+import path from 'path';
 import dotenv from 'dotenv';
 dotenv.config(); // Load environment variables
 import { notFound, errorHandler } from "./middleware/errorMiddleware.js"; // Custom error handling middleware
@@ -27,7 +29,9 @@ app.use(express.urlencoded({extended:true}))
 
 app.use(cookieParser());
 
+app.use(express.static('backend/public'));
 
+app.use(cors({ origin: "http://localhost:3000", credentials: true }));
 // Set up routes for handling user-related API requests
 app.use('/api/users/', userRoutes);
 
