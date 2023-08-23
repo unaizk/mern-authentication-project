@@ -47,7 +47,6 @@ const ProfileScreen = () => {
         const res = await updateUser(formData).unwrap();
         dispatch(setCredentials({ ...res }));
         toast.success("Profile Updated ");
-        navigate("/");
       } catch (err) {
         toast.error(err?.data?.message || err.error);
       }
