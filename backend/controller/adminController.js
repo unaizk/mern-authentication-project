@@ -1,7 +1,7 @@
 import asyncHandler from "express-async-handler";
 import Admin from "../models/adminModel.js"
 import generateTokenAdmin from "../utils/generateTokenAdmin.js";
-
+import { fetchAllUsers } from "../helpers/adminHelpers.js";
 
 
 // ========================desc - Auth admin/set token========================
@@ -124,10 +124,27 @@ const updateAdminProfile = asyncHandler( async(req,res)=>{
     
 });
 
+
+// ========================desc - list user details========================
+//========================route - GET api/admin/usersList========================
+//========================access- private========================
+
+const getAllUsers = asyncHandler(async (req,res) => {
+    fetchAllUsers()
+      .then((users) => {
+        res.status(200).json({users}); 
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  })
+
+
 export {
     authAdmin,
     registerAdmin,
     logoutAdmin,
     getAdminProfile,
-    updateAdminProfile
+    updateAdminProfile,
+    getAllUsers
 }

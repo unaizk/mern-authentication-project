@@ -12,14 +12,16 @@ const AdminHero = () => {
           <h1 className="text-center mb-4">
             {adminInfo ? `Welcome ${adminInfo.name}` : "ADMIN Authentication"}
           </h1>
-          <p className="text-center mb-4">
-            This is a boilerplate for MERN authentication that stores a JWT in
-            an HTTP-Only cookie. It also uses Redux Toolkit and the React
-            Bootstrap library
-          </p>
+           <p className='text-center mb-4'>
+        {adminInfo ? `Email : ${adminInfo.email}` : "This is a boilerplate for MERN authentication that stores a JWT inan HTTP-Only cookie. It also uses Redux Toolkit and the ReactBootstrap library" } 
+        </p>
           <div className="d-flex">
             {adminInfo ? (
-             ""
+             <LinkContainer to="/admin/usersList">
+                  <Button variant="primary" className="me-3">
+                    Users List
+                  </Button>
+                </LinkContainer>
             ) : (
                 <>
                 <LinkContainer to="/admin/login">
