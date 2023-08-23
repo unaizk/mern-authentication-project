@@ -74,8 +74,55 @@ const logoutAdmin = asyncHandler( async(req,res)=>{
     res.status(200).json({message:"Logged out"})
 });
 
+
+
+
+// ========================desc - Get admin profile========================
+//========================route - GET api/admin/profile========================
+//========================access- private========================
+const getAdminProfile = asyncHandler( async(req,res)=>{
+    const admin = {
+        id:req.admin._id,
+        name:req.admin.name,
+        email:req.admin.email
+    }
+    res.status(200).json(admin)
+});
+
+
+// ========================desc - Update admin profile========================
+//========================route - PUT api/admin/profile========================
+//========================access- private========================
+const updateAdminProfile = asyncHandler( async(req,res)=>{
+    const admin = await Admin.findById(req.admin._id);
+
+    if(admin){
+        admin.name = req.body.name || admin.name;
+        admin.email = req.body.email || admin.email;
+
+        if(req.body.password){
+            admin.password = req.body.password;
+        }
+    
+        const updatedAdmin = await admin.save();
+    
+        res.status(200).json({
+            _id : updatedAdmin._id,
+            name : updatedAdmin.name,
+            email : updatedAdmin.email
+        })
+    }else{
+        res.status(404);
+        throw new Error('Admin not found')
+    }
+
+    
+});
+
 export {
     authAdmin,
     registerAdmin,
-    logoutAdmin
+    logoutAdmin,
+    getAdminProfile,
+    updateAdminProfile
 }
