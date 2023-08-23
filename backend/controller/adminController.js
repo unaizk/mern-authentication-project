@@ -32,13 +32,18 @@ const authAdmin = asyncHandler( async(req,res)=>{
 //========================route - POST api/admin========================
 //========================access- public========================
 const registerAdmin = asyncHandler( async(req,res)=>{
-    const {name,email,password} = req.body
+    const {name,email,password,key} = req.body
 
     const adminExist = await Admin.findOne({email});
 
     if(adminExist){
         res.status(400);
         throw new Error('Admin already exisit')
+    }
+    console.log(key,'keyyyyyyyyyy')
+    if(key!== process.env.ADMIN_KEY){
+        res.status(401);
+        throw new Error('Invalid Key')
     }
 
     const admin = await Admin.create({

@@ -13,6 +13,7 @@ import { adminSetCredentials } from '../slices/adminAuthSlice';
 const AdminRegisterScreen = () => {
     const [name,setName] = useState('')
     const [email,setEmail] = useState('')
+    const [key,setKey] = useState('')
     const [password,setPassword] = useState('');
     const [confirmPassword,setConfirmPassword] = useState('');
 
@@ -34,7 +35,7 @@ const AdminRegisterScreen = () => {
             toast.error('Password do not match')
         }else{
             try {
-                const res = await adminRegister({name,email,password}).unwrap();
+                const res = await adminRegister({name,email,password,key}).unwrap();
                 dispatch(adminSetCredentials({...res}))
                 navigate('/admin')
             } catch (err) {
@@ -68,6 +69,12 @@ const AdminRegisterScreen = () => {
             <Form.Group className='my-2' controlId='confirmPassword'>
                 <Form.Label>Confirm Password</Form.Label>
                 <Form.Control  type='password' placeholder='Confirm Password' value={confirmPassword} onChange={(e)=>setConfirmPassword(e.target.value)}>
+                </Form.Control>
+            </Form.Group>
+
+            <Form.Group className='my-2' controlId='adminkey'>
+                <Form.Label>Admin Key</Form.Label>
+                <Form.Control  type='password' placeholder='Enter a key' value={key} onChange={(e)=>setKey(e.target.value)}>
                 </Form.Control>
             </Form.Group>
                 {isLoading && <Loader />}
