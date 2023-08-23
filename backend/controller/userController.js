@@ -90,11 +90,16 @@ const getUserProfile = asyncHandler( async(req,res)=>{
 //========================route - PUT api/users/profile========================
 //========================access- private========================
 const updateUserProfile = asyncHandler( async(req,res)=>{
+   
     const user = await User.findById(req.user._id);
-
+    
     if(user){
         user.name = req.body.name || user.name;
         user.email = req.body.email || user.email;
+        
+        if(req.file){
+            user.imagePath = req.file.filename || user.imagePath;
+           }
 
         if(req.body.password){
             user.password = req.body.password;
@@ -105,8 +110,10 @@ const updateUserProfile = asyncHandler( async(req,res)=>{
         res.status(200).json({
             _id : updatedUser._id,
             name : updatedUser.name,
-            email : updatedUser.email
+            email : updatedUser.email,
+            image:updatedUser.imagePath
         })
+
     }else{
         res.status(404);
         throw new Error('User not found')
