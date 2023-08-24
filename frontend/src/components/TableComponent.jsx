@@ -2,13 +2,19 @@ import React,{useState} from "react";
 import Table from "react-bootstrap/Table";
 import Form from 'react-bootstrap/Form';
 import { Button, Modal,  Form as BootstrapForm } from "react-bootstrap";
-import { useUpdateUserByAdminMutation } from "../slices/adminApiSlice";
+import { useUpdateUserByAdminMutation , useDeleteUserMutation } from "../slices/adminApiSlice";
 import { toast } from "react-toastify";
 
 
 const TableComponent = ({ users }) => {
   
   const [searchQuery, setSearchQuery] = useState('');
+  const [showConfirmation, setShowConfirmation] = useState(false); // State for the confirmation dialog
+  const [userIdToDelete, setUserIdToDelete] = useState(null); // Track the user ID to delete
+
+
+
+
   const [userIdToUpdate, setUserIdToUpdate] = useState("");
   const [userNameToUpdate, setUserNameToUpdate] = useState("");
   const [userEmailToUpdate, setUserEmailToUpdate] = useState("");
@@ -24,6 +30,7 @@ const TableComponent = ({ users }) => {
     user.email.toLowerCase().includes(searchQuery.toLowerCase()) 
   );
 
+  const [deleteUser, { isLoading }] = useDeleteUserMutation();  
   const [updateUserByAdmin, { isLoading: isUpdating }] = useUpdateUserByAdminMutation();
 
   const handleOpenUpdateModal = (user) => {
@@ -47,6 +54,21 @@ const TableComponent = ({ users }) => {
       // Reload the page to reflect the updated data
       window.location.reload();
       
+    } catch (err) {
+      toast.error(err?.data?.message || err?.error);
+    }
+  };
+
+
+  const handleDelete = async () => {
+    try {
+      const responseFromApiCall = await deleteUser({ userId: userIdToDelete });
+      toast.success("User Deleted Successfully.");
+      setUserIdToDelete(null); // Clear the user ID to delete
+      setShowConfirmation(false); // Close the confirmation dialog
+
+      // Reload the page to reflect the updated data
+      window.location.reload();
     } catch (err) {
       toast.error(err?.data?.message || err?.error);
     }
@@ -138,6 +160,23 @@ const TableComponent = ({ users }) => {
           </Button>
           <Button variant="primary" onClick={handleUpdate} disabled={isUpdating}>
             {isUpdating ? "Updating..." : "Update"}
+          </Button>
+        </Modal.Footer>
+      </Modal>
+
+
+        {/* Confirmation Dialog */}
+        <Modal show={showConfirmation} onHide={() => setShowConfirmation(false)}>
+        <Modal.Header closeButton>
+          <Modal.Title>Confirm Deletion</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>Are you sure you want to delete this user?</Modal.Body>
+        <Modal.Footer>
+          <Button variant="secondary" onClick={() => setShowConfirmation(false)}>
+            Cancel
+          </Button>
+          <Button variant="danger" onClick={handleDelete} disabled={isLoading}>
+            {isLoading ? "Deleting..." : "Delete"}
           </Button>
         </Modal.Footer>
       </Modal>

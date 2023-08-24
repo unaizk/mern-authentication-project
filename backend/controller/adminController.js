@@ -1,7 +1,7 @@
 import asyncHandler from "express-async-handler";
 import Admin from "../models/adminModel.js"
 import generateTokenAdmin from "../utils/generateTokenAdmin.js";
-import { fetchAllUsers , updateUser} from "../helpers/adminHelpers.js";
+import { fetchAllUsers , updateUser, deleteUser} from "../helpers/adminHelpers.js";
 
 
 // ========================desc - Auth admin/set token========================
@@ -174,6 +174,30 @@ const getAllUsers = asyncHandler(async (req,res) => {
 
 });
 
+const deleteUserData = asyncHandler( async (req, res) => {
+
+    const userId = req.body.userId;
+
+    const usersDeleteStatus = await deleteUser(userId);
+
+    if(usersDeleteStatus.success){
+
+        const response = usersDeleteStatus.message;
+
+        res.status(200).json({ message:response });
+
+    }else{
+
+        res.status(404);
+
+        const response = usersDeleteStatus.message;
+
+        throw new Error(response);
+
+    }
+
+});
+
 
 export {
     authAdmin,
@@ -182,5 +206,6 @@ export {
     getAdminProfile,
     updateAdminProfile,
     getAllUsers,
-    updateUserData
+    updateUserData,
+    deleteUserData
 }
