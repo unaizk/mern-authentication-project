@@ -1,7 +1,7 @@
 import asyncHandler from "express-async-handler";
 import Admin from "../models/adminModel.js"
 import generateTokenAdmin from "../utils/generateTokenAdmin.js";
-import { fetchAllUsers } from "../helpers/adminHelpers.js";
+import { fetchAllUsers , updateUser} from "../helpers/adminHelpers.js";
 
 
 // ========================desc - Auth admin/set token========================
@@ -140,11 +140,47 @@ const getAllUsers = asyncHandler(async (req,res) => {
   })
 
 
+  const updateUserData = asyncHandler( async (req, res) => {
+
+    const userId = req.body.userId;
+    const name = req.body.name;
+    const email = req.body.email;
+
+    if(!userId){
+
+        res.status(404);;
+
+        throw new Error("UserId not received in request. User update failed.");
+
+    }
+
+    const userData = {userId: userId, name: name, email: email};
+
+    const usersUpdateStatus = await updateUser(userData);
+
+    if(usersUpdateStatus.success){
+
+        const response = usersUpdateStatus.message;
+
+        res.status(200).json({ message:response });
+
+    }else{
+
+        res.status(404);;
+
+        throw new Error("User update failed.");
+
+    }
+
+});
+
+
 export {
     authAdmin,
     registerAdmin,
     logoutAdmin,
     getAdminProfile,
     updateAdminProfile,
-    getAllUsers
+    getAllUsers,
+    updateUserData
 }

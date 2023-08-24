@@ -31,7 +31,16 @@ export const adminApiSlice = apiSlice.injectEndpoints({
                 body : data
             })
         }),
+        updateUserByAdmin: builder.mutation({
+            
+            query: (data) => ({
+                url: `${ADMIN_URL}/update-user`,
+                method: 'PUT',
+                body: data
+            })
+
+        })
     })
 })
 
-export const  {useAdminLoginMutation , useAdminLogoutMutation , useAdminRegisterMutation , useAdminUpdateUserMutation} = adminApiSlice
+export const  {useAdminLoginMutation , useAdminLogoutMutation , useAdminRegisterMutation , useAdminUpdateUserMutation,  useUpdateUserByAdminMutation} = adminApiSlice
